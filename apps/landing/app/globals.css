@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #1D4ED8;
+  --color-brand-blue-dark: #1e3a8a;
+  --color-brand-orange: #F97316;
+  --color-brand-orange-dark: #ea580c;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  background: #ffffff;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
