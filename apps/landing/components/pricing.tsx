@@ -60,103 +60,68 @@ export function Pricing() {
     <section
       ref={sectionRef}
       id="precios"
+      className="py-32 px-4 sm:px-6"
       style={{ background: "var(--bg-subtle)" }}
-      className="py-24 px-4 sm:px-6"
     >
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-14">
-          <div
-            className="reveal inline-block text-sm font-semibold px-4 py-2 rounded-full mb-4"
-            style={{
-              background: "color-mix(in srgb, #059669 10%, transparent)",
-              color: "#059669",
-              border: "1px solid color-mix(in srgb, #059669 20%, transparent)",
-            }}
-          >
+
+        {/* Header */}
+        <div className="max-w-2xl mb-16">
+          <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
             Precios
-          </div>
-          <h2
-            className="reveal text-3xl sm:text-4xl font-bold mb-4"
-            style={{ color: "var(--text)" }}
-          >
-            Sin sorpresas. Sin comisiones.
+          </p>
+          <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight mb-6" style={{ color: "var(--text)" }}>
+            Sin sorpresas.<br />Sin comisiones.
           </h2>
-          <p
-            className="reveal text-lg max-w-xl mx-auto"
-            style={{ color: "var(--text-muted)" }}
-          >
+          <p className="reveal text-lg" style={{ color: "var(--text-muted)" }}>
             30 días gratuitos sin tarjeta de crédito. Cancela cuando quieras.
           </p>
         </div>
 
+        {/* Plans */}
         <div className="grid sm:grid-cols-3 gap-6 items-start">
           {plans.map((plan, i) => (
             <div
               key={plan.name}
-              className={`stagger-item relative rounded-2xl border p-7 ${
-                plan.highlighted
-                  ? "scale-105 shadow-[0_20px_60px_-12px_rgb(37_99_235_/_0.35)] hover:shadow-[0_28px_80px_-12px_rgb(37_99_235_/_0.45)] transition-shadow duration-300"
-                  : "card-hover"
-              }`}
-              style={
-                plan.highlighted
-                  ? {
-                      background: "var(--brand)",
-                      borderColor: "var(--brand)",
-                      boxShadow: "var(--shadow-lg)",
-                      ["--i" as string]: i,
-                    }
-                  : {
-                      background: "var(--bg-card)",
-                      border: "1px solid var(--border)",
-                      ["--i" as string]: i,
-                    }
-              }
+              className={`stagger-item relative rounded-2xl p-8 ${plan.highlighted ? "" : ""}`}
+              style={{
+                background: plan.highlighted ? "var(--brand)" : "var(--bg)",
+                border: plan.highlighted ? "none" : "1px solid var(--border)",
+                ["--i" as string]: i,
+              }}
             >
               {plan.badge && (
                 <div
+                  className="absolute -top-3.5 left-6 text-xs font-bold px-3 py-1 rounded-full"
                   style={{ background: "var(--accent)", color: "white" }}
-                  className="absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-bold px-4 py-1.5 rounded-full shadow-lg"
                 >
                   {plan.badge}
                 </div>
               )}
 
-              <div className="mb-6">
+              <div className="mb-8">
                 <div
-                  style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}
-                  className="text-sm font-semibold mb-1"
+                  className="text-sm font-semibold mb-4"
+                  style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-subtle)" }}
                 >
                   {plan.name}
                 </div>
-                <div className="flex items-end gap-1 mb-2">
+                <div className="flex items-end gap-1 mb-3">
                   {plan.price !== "Consultar" && (
-                    <span
-                      style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}
-                      className="text-sm font-medium"
-                    >
+                    <span className="text-sm font-medium mb-1" style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}>
                       €
                     </span>
                   )}
-                  <span
-                    style={{ color: plan.highlighted ? "white" : "var(--text)" }}
-                    className="text-4xl font-bold"
-                  >
+                  <span className="text-5xl font-bold tracking-tight" style={{ color: plan.highlighted ? "white" : "var(--text)" }}>
                     {plan.price}
                   </span>
                   {plan.price !== "Consultar" && (
-                    <span
-                      style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}
-                      className="text-sm mb-1"
-                    >
+                    <span className="text-sm mb-1" style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}>
                       /mes
                     </span>
                   )}
                 </div>
-                <p
-                  style={{ color: plan.highlighted ? "rgba(255,255,255,0.75)" : "var(--text-muted)" }}
-                  className="text-sm leading-relaxed"
-                >
+                <p className="text-sm leading-relaxed" style={{ color: plan.highlighted ? "rgba(255,255,255,0.7)" : "var(--text-muted)" }}>
                   {plan.description}
                 </p>
               </div>
@@ -164,12 +129,8 @@ export function Pricing() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-3 text-sm">
-                    <Check
-                      size={16}
-                      style={{ color: plan.highlighted ? "rgba(255,255,255,0.7)" : "var(--brand)" }}
-                      className="shrink-0"
-                    />
-                    <span style={{ color: plan.highlighted ? "rgba(255,255,255,0.9)" : "var(--text-muted)" }}>
+                    <Check size={15} style={{ color: plan.highlighted ? "rgba(255,255,255,0.7)" : "var(--brand)" }} className="shrink-0" />
+                    <span style={{ color: plan.highlighted ? "rgba(255,255,255,0.85)" : "var(--text-muted)" }}>
                       {feature}
                     </span>
                   </li>
@@ -178,18 +139,19 @@ export function Pricing() {
 
               <a
                 href="#lista-espera"
+                className="block text-center font-semibold py-3 px-6 rounded-xl text-sm transition-opacity hover:opacity-85"
                 style={
                   plan.highlighted
                     ? { background: "white", color: "var(--brand)" }
                     : { background: "var(--brand)", color: "white" }
                 }
-                className="block text-center font-semibold py-3 px-6 rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
               >
                 {plan.cta}
               </a>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );

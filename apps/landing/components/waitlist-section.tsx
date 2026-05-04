@@ -42,76 +42,37 @@ export function WaitlistSection() {
     <section
       ref={sectionRef}
       id="lista-espera"
-      style={{
-        background: "linear-gradient(135deg, var(--brand-deeper) 0%, var(--brand-dark) 50%, #1e40af 100%)",
-      }}
-      className="py-24 px-4 sm:px-6 relative overflow-hidden"
+      className="py-32 px-4 sm:px-6"
+      style={{ background: "var(--brand-deeper)" }}
     >
-      {/* Decorative circles */}
-      <div
-        className="absolute -top-20 -right-20 w-64 h-64 rounded-full opacity-10"
-        style={{ background: "white" }}
-      />
-      <div
-        className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-5"
-        style={{ background: "white" }}
-      />
-      {/* Grid sutil */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
+      <div className="max-w-xl mx-auto text-center">
 
-      <div className="max-w-2xl mx-auto text-center relative z-10">
-        <div
-          className="reveal inline-block text-white text-sm font-semibold px-4 py-2 rounded-full mb-6"
-          style={{
-            background: "rgba(255,255,255,0.15)",
-            border: "1px solid rgba(255,255,255,0.25)",
-          }}
-        >
+        <p className="reveal text-xs font-semibold tracking-widest uppercase mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>
           Acceso anticipado · Solo 50 plazas
-        </div>
-        <h2 className="reveal text-3xl sm:text-4xl font-bold text-white mb-4">
-          Sé de las primeras autoescuelas en usar Escualia
+        </p>
+
+        <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight text-white mb-6">
+          Sé de las primeras<br />autoescuelas en usarlo.
         </h2>
-        <p className="reveal text-blue-100 text-lg mb-10">
+
+        <p className="reveal text-lg mb-12" style={{ color: "rgba(255,255,255,0.65)" }}>
           Acceso gratuito extendido y soporte personalizado para las primeras 50 autoescuelas.
-          Sin tarjeta de crédito.
         </p>
 
         <div className="reveal">
           {status === "success" ? (
-            <div
-              className="rounded-2xl p-8 text-center"
-              style={{
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
-              }}
-            >
-              <CheckCircle size={48} className="text-emerald-300 mx-auto mb-4" />
-              <h3 className="text-white text-xl font-bold mb-2">¡Estás en la lista!</h3>
-              <p className="text-blue-100">
-                Te avisaremos cuando Escualia esté listo. Revisa tu email (y el spam, por si acaso).
+            <div className="text-center py-8">
+              <CheckCircle size={40} className="mx-auto mb-4" style={{ color: "rgba(255,255,255,0.8)" }} />
+              <h3 className="text-white text-xl font-bold mb-2">Estás en la lista.</h3>
+              <p style={{ color: "rgba(255,255,255,0.6)" }}>
+                Te avisaremos cuando Escualia esté listo. Revisa tu email.
               </p>
             </div>
           ) : (
-            <form
-              onSubmit={handleSubmit}
-              className="rounded-2xl p-6 sm:p-8"
-              style={{
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(12px)",
-                border: "1px solid rgba(255,255,255,0.2)",
-              }}
-            >
-              <div className="grid sm:grid-cols-2 gap-4 mb-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <div className="text-left">
-                  <label htmlFor="name" className="block text-blue-100 text-sm font-medium mb-2">
+                  <label htmlFor="name" className="block text-xs font-medium mb-2" style={{ color: "rgba(255,255,255,0.6)" }}>
                     Nombre de la autoescuela
                   </label>
                   <input
@@ -121,16 +82,15 @@ export function WaitlistSection() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Autoescuela García"
-                    className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/40 transition-shadow"
+                    className="w-full rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
                     style={{
-                      background: "rgba(255,255,255,0.12)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      color: "white",
+                      background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.15)",
                     }}
                   />
                 </div>
                 <div className="text-left">
-                  <label htmlFor="email" className="block text-blue-100 text-sm font-medium mb-2">
+                  <label htmlFor="email" className="block text-xs font-medium mb-2" style={{ color: "rgba(255,255,255,0.6)" }}>
                     Email de contacto
                   </label>
                   <input
@@ -140,42 +100,42 @@ export function WaitlistSection() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="hola@autoescuela.es"
-                    className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-white/40 transition-shadow"
+                    className="w-full rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
                     style={{
-                      background: "rgba(255,255,255,0.12)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      color: "white",
+                      background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.15)",
                     }}
                   />
                 </div>
               </div>
 
               {status === "error" && (
-                <p className="text-red-300 text-sm mb-4">{errorMsg}</p>
+                <p className="text-red-300 text-sm text-left">{errorMsg}</p>
               )}
 
               <button
                 type="submit"
                 disabled={status === "loading"}
-                style={{ background: "var(--accent)" }}
-                className="w-full disabled:opacity-70 text-white font-bold py-4 px-6 rounded-xl transition-all hover:opacity-90 hover:scale-[1.02] flex items-center justify-center gap-2 text-base"
+                className="w-full disabled:opacity-60 font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 text-sm transition-opacity hover:opacity-85"
+                style={{ background: "white", color: "var(--brand-deeper)" }}
               >
                 {status === "loading" ? (
-                  <Loader2 size={20} className="animate-spin" />
+                  <Loader2 size={18} className="animate-spin" />
                 ) : (
                   <>
                     Quiero acceso anticipado
-                    <ArrowRight size={20} />
+                    <ArrowRight size={18} />
                   </>
                 )}
               </button>
 
-              <p className="text-blue-200 text-xs mt-4 text-center">
+              <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
                 Sin tarjeta de crédito · Sin compromiso · Cancela cuando quieras
               </p>
             </form>
           )}
         </div>
+
       </div>
     </section>
   );

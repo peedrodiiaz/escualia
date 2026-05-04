@@ -95,34 +95,20 @@ export function FAQ() {
     <section
       ref={sectionRef}
       id="faq"
-      style={{ background: "var(--bg)" }}
-      className="py-24 px-4 sm:px-6"
+      className="py-32 px-4 sm:px-6"
+      style={{ background: "var(--bg-subtle)" }}
     >
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <div
-            className="reveal inline-block text-sm font-semibold px-4 py-2 rounded-full mb-4"
-            style={{
-              background: "var(--bg-muted)",
-              color: "var(--text-muted)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            Preguntas frecuentes
-          </div>
-          <h2
-            className="reveal text-3xl sm:text-4xl font-bold mb-4"
-            style={{ color: "var(--text)" }}
-          >
-            Todo lo que necesitas saber
+        <div className="mb-14">
+          <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
+            FAQ
+          </p>
+          <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight mb-6" style={{ color: "var(--text)" }}>
+            Todo lo que necesitas saber.
           </h2>
-          <p className="reveal" style={{ color: "var(--text-muted)" }}>
+          <p className="reveal text-base" style={{ color: "var(--text-muted)" }}>
             ¿Tienes otra pregunta?{" "}
-            <a
-              href="mailto:hola@escualia.es"
-              style={{ color: "var(--brand)" }}
-              className="font-semibold hover:underline"
-            >
+            <a href="mailto:hola@escualia.es" style={{ color: "var(--brand)" }} className="font-semibold hover:opacity-70 transition-opacity">
               Escríbenos directamente.
             </a>
           </p>
