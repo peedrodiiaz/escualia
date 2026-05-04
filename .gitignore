@@ -36,3 +36,6 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# leads data — contains PII, must never be committed
+**/leads.json

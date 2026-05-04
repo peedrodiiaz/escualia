@@ -1,4 +1,7 @@
+"use client";
+
 import { FileText, Calendar, AlertCircle, Phone } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 const problems = [
   {
@@ -24,43 +27,71 @@ const problems = [
 ];
 
 export function Problem() {
+  const sectionRef = useReveal<HTMLElement>({ threshold: 0.08 });
+
   return (
-    <section id="problema" className="py-20 px-4 sm:px-6 bg-white">
+    <section
+      ref={sectionRef}
+      id="problema"
+      style={{ background: "var(--bg)" }}
+      className="py-24 px-4 sm:px-6"
+    >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <div className="inline-block bg-red-50 text-red-600 text-sm font-semibold px-4 py-2 rounded-full mb-4">
+          <div
+            className="reveal inline-block text-sm font-semibold px-4 py-2 rounded-full mb-4"
+            style={{
+              background: "color-mix(in srgb, #ef4444 10%, transparent)",
+              color: "#dc2626",
+              border: "1px solid color-mix(in srgb, #ef4444 20%, transparent)",
+            }}
+          >
             El problema real
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2
+            className="reveal text-3xl sm:text-4xl font-bold mb-4"
+            style={{ color: "var(--text)" }}
+          >
             Así gestionas hoy tu autoescuela
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p
+            className="reveal text-lg max-w-2xl mx-auto"
+            style={{ color: "var(--text-muted)" }}
+          >
             No es culpa tuya. Es que las herramientas actuales no están pensadas para autoescuelas.
           </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {problems.map((p) => {
+          {problems.map((p, i) => {
             const Icon = p.icon;
             return (
               <div
                 key={p.title}
-                className="bg-slate-50 rounded-2xl p-6 border border-slate-100 hover:border-red-200 hover:bg-red-50/30 transition-colors group"
+                className="stagger-item card-hover rounded-2xl p-6 group hover:border-red-300"
+                style={{
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
+                  ["--i" as string]: i,
+                }}
               >
-                <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center mb-4 group-hover:bg-red-200 transition-colors">
-                  <Icon size={20} className="text-red-600" />
+                <div
+                  style={{ background: "color-mix(in srgb, #ef4444 10%, transparent)" }}
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <Icon size={20} className="text-red-500" />
                 </div>
-                <h3 className="font-bold text-slate-900 mb-2">{p.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{p.description}</p>
+                <h3 style={{ color: "var(--text)" }} className="font-bold mb-2">{p.title}</h3>
+                <p style={{ color: "var(--text-muted)" }} className="text-sm leading-relaxed">{p.description}</p>
               </div>
             );
           })}
         </div>
 
-        <div className="mt-12 text-center">
-          <p className="text-slate-500 text-lg">
+        <div className="mt-12 text-center reveal">
+          <p style={{ color: "var(--text-muted)" }} className="text-lg">
             ¿Te suena?{" "}
-            <a href="#lista-espera" className="text-[#1D4ED8] font-semibold hover:underline">
+            <a href="#lista-espera" style={{ color: "var(--brand)" }} className="font-semibold hover:underline">
               Escualia lo resuelve todo →
             </a>
           </p>

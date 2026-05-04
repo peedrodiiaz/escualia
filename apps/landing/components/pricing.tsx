@@ -1,4 +1,7 @@
+"use client";
+
 import { Check } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 const plans = [
   {
@@ -51,51 +54,109 @@ const plans = [
 ];
 
 export function Pricing() {
+  const sectionRef = useReveal<HTMLElement>({ threshold: 0.07 });
+
   return (
-    <section id="precios" className="py-20 px-4 sm:px-6 bg-white">
+    <section
+      ref={sectionRef}
+      id="precios"
+      style={{ background: "var(--bg-subtle)" }}
+      className="py-24 px-4 sm:px-6"
+    >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <div className="inline-block bg-emerald-50 text-emerald-700 text-sm font-semibold px-4 py-2 rounded-full mb-4">
+          <div
+            className="reveal inline-block text-sm font-semibold px-4 py-2 rounded-full mb-4"
+            style={{
+              background: "color-mix(in srgb, #059669 10%, transparent)",
+              color: "#059669",
+              border: "1px solid color-mix(in srgb, #059669 20%, transparent)",
+            }}
+          >
             Precios
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2
+            className="reveal text-3xl sm:text-4xl font-bold mb-4"
+            style={{ color: "var(--text)" }}
+          >
             Sin sorpresas. Sin comisiones.
           </h2>
-          <p className="text-lg text-slate-600 max-w-xl mx-auto">
+          <p
+            className="reveal text-lg max-w-xl mx-auto"
+            style={{ color: "var(--text-muted)" }}
+          >
             30 días gratuitos sin tarjeta de crédito. Cancela cuando quieras.
           </p>
         </div>
 
         <div className="grid sm:grid-cols-3 gap-6 items-start">
-          {plans.map((plan) => (
+          {plans.map((plan, i) => (
             <div
               key={plan.name}
-              className={`rounded-2xl border p-7 relative ${
+              className={`stagger-item relative rounded-2xl border p-7 ${
                 plan.highlighted
-                  ? "bg-[#1D4ED8] border-[#1D4ED8] text-white shadow-2xl shadow-blue-300 scale-105"
-                  : "bg-white border-slate-200 text-slate-900"
+                  ? "scale-105 shadow-[0_20px_60px_-12px_rgb(37_99_235_/_0.35)] hover:shadow-[0_28px_80px_-12px_rgb(37_99_235_/_0.45)] transition-shadow duration-300"
+                  : "card-hover"
               }`}
+              style={
+                plan.highlighted
+                  ? {
+                      background: "var(--brand)",
+                      borderColor: "var(--brand)",
+                      boxShadow: "var(--shadow-lg)",
+                      ["--i" as string]: i,
+                    }
+                  : {
+                      background: "var(--bg-card)",
+                      border: "1px solid var(--border)",
+                      ["--i" as string]: i,
+                    }
+              }
             >
               {plan.badge && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#F97316] text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
+                <div
+                  style={{ background: "var(--accent)", color: "white" }}
+                  className="absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-bold px-4 py-1.5 rounded-full shadow-lg"
+                >
                   {plan.badge}
                 </div>
               )}
 
               <div className="mb-6">
-                <div className={`text-sm font-semibold mb-1 ${plan.highlighted ? "text-blue-200" : "text-slate-500"}`}>
+                <div
+                  style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}
+                  className="text-sm font-semibold mb-1"
+                >
                   {plan.name}
                 </div>
                 <div className="flex items-end gap-1 mb-2">
                   {plan.price !== "Consultar" && (
-                    <span className={`text-sm font-medium ${plan.highlighted ? "text-blue-200" : "text-slate-500"}`}>€</span>
+                    <span
+                      style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}
+                      className="text-sm font-medium"
+                    >
+                      €
+                    </span>
                   )}
-                  <span className="text-4xl font-bold">{plan.price}</span>
+                  <span
+                    style={{ color: plan.highlighted ? "white" : "var(--text)" }}
+                    className="text-4xl font-bold"
+                  >
+                    {plan.price}
+                  </span>
                   {plan.price !== "Consultar" && (
-                    <span className={`text-sm mb-1 ${plan.highlighted ? "text-blue-200" : "text-slate-500"}`}>/mes</span>
+                    <span
+                      style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}
+                      className="text-sm mb-1"
+                    >
+                      /mes
+                    </span>
                   )}
                 </div>
-                <p className={`text-sm leading-relaxed ${plan.highlighted ? "text-blue-100" : "text-slate-500"}`}>
+                <p
+                  style={{ color: plan.highlighted ? "rgba(255,255,255,0.75)" : "var(--text-muted)" }}
+                  className="text-sm leading-relaxed"
+                >
                   {plan.description}
                 </p>
               </div>
@@ -105,20 +166,24 @@ export function Pricing() {
                   <li key={feature} className="flex items-center gap-3 text-sm">
                     <Check
                       size={16}
-                      className={`shrink-0 ${plan.highlighted ? "text-blue-200" : "text-[#1D4ED8]"}`}
+                      style={{ color: plan.highlighted ? "rgba(255,255,255,0.7)" : "var(--brand)" }}
+                      className="shrink-0"
                     />
-                    <span className={plan.highlighted ? "text-blue-50" : "text-slate-700"}>{feature}</span>
+                    <span style={{ color: plan.highlighted ? "rgba(255,255,255,0.9)" : "var(--text-muted)" }}>
+                      {feature}
+                    </span>
                   </li>
                 ))}
               </ul>
 
               <a
                 href="#lista-espera"
-                className={`block text-center font-semibold py-3 px-6 rounded-xl transition-colors ${
+                style={
                   plan.highlighted
-                    ? "bg-white text-[#1D4ED8] hover:bg-blue-50"
-                    : "bg-[#1D4ED8] text-white hover:bg-[#1e3a8a]"
-                }`}
+                    ? { background: "white", color: "var(--brand)" }
+                    : { background: "var(--brand)", color: "white" }
+                }
+                className="block text-center font-semibold py-3 px-6 rounded-xl transition-all hover:opacity-90 hover:scale-[1.02]"
               >
                 {plan.cta}
               </a>
