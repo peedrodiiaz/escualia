@@ -39,3 +39,6 @@ yarn-error.log*
 
 # leads data — contains PII, must never be committed
 **/leads.json
+
+.vercel
+.env*.local
