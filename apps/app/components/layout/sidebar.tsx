@@ -11,6 +11,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  UsersRound,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "instructor", "student"] },
   { href: "/dashboard/students", label: "Alumnos", icon: Users, roles: ["admin", "instructor"] },
+  { href: "/dashboard/team", label: "Equipo", icon: UsersRound, roles: ["admin"] },
   { href: "/dashboard/agenda", label: "Agenda", icon: CalendarDays, roles: ["admin", "instructor", "student"] },
   { href: "/dashboard/billing", label: "Facturación", icon: Receipt, roles: ["admin"] },
   { href: "/dashboard/study", label: "Estudiar", icon: BookOpen, roles: ["student"] },

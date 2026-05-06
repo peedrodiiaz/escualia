@@ -1,13 +1,17 @@
+import dynamic from "next/dynamic";
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/hero";
 import { SocialProof } from "@/components/social-proof";
 import { Problem } from "@/components/problem";
 import { HowItWorks } from "@/components/how-it-works";
 import { Features } from "@/components/features";
-import { Pricing } from "@/components/pricing";
-import { FAQ } from "@/components/faq";
-import { WaitlistSection } from "@/components/waitlist-section";
 import { Footer } from "@/components/footer";
+import { faqItems } from "@/lib/faq-data";
+import { pricingPlans } from "@/lib/pricing-data";
+
+const Pricing = dynamic(() => import("@/components/pricing").then((m) => m.Pricing));
+const FAQ = dynamic(() => import("@/components/faq").then((m) => m.FAQ));
+const WaitlistSection = dynamic(() => import("@/components/waitlist-section").then((m) => m.WaitlistSection));
 
 /** Curva SVG que hace la transición de bg-subtle → bg */
 function WaveDown({ fromColor, toColor }: { fromColor: string; toColor: string }) {
@@ -41,9 +45,38 @@ function WaveUp({ fromColor, toColor }: { fromColor: string; toColor: string }) 
   );
 }
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Escualia",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  offers: pricingPlans
+    .filter((p) => p.price !== "Consultar")
+    .map((p) => ({
+      "@type": "Offer",
+      name: p.name,
+      price: p.price,
+      priceCurrency: "EUR",
+      billingDuration: "P1M",
+    })),
+};
+
 export default function Home() {
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
       <Navbar />
 
       {/* Hero: bg-subtle */}

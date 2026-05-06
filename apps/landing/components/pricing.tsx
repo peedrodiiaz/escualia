@@ -2,56 +2,7 @@
 
 import { Check } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
-
-const plans = [
-  {
-    name: "Autónomo",
-    price: "29",
-    description: "Para autoescuelas independientes con hasta 2 instructores.",
-    features: [
-      "Hasta 100 alumnos activos",
-      "2 instructores",
-      "Gestión de alumnos y agenda",
-      "Facturación básica",
-      "App de estudio para alumnos",
-      "Soporte por email",
-    ],
-    cta: "Empezar gratis 30 días",
-    highlighted: false,
-  },
-  {
-    name: "Escuela",
-    price: "79",
-    description: "La opción más popular para autoescuelas en crecimiento.",
-    features: [
-      "Alumnos ilimitados",
-      "Instructores ilimitados",
-      "Todo el plan Autónomo",
-      "Informes y estadísticas",
-      "App móvil para instructores",
-      "Recordatorios automáticos",
-      "Soporte prioritario",
-    ],
-    cta: "Empezar gratis 30 días",
-    highlighted: true,
-    badge: "Más popular",
-  },
-  {
-    name: "Franquicia",
-    price: "Consultar",
-    description: "Para grupos con varias academias y necesidades avanzadas.",
-    features: [
-      "Todo el plan Escuela",
-      "Multi-sede centralizada",
-      "API e integraciones",
-      "Panel de administración",
-      "Gestor de cuenta dedicado",
-      "SLA garantizado",
-    ],
-    cta: "Hablar con ventas",
-    highlighted: false,
-  },
-];
+import { pricingPlans as plans } from "@/lib/pricing-data";
 
 export function Pricing() {
   const sectionRef = useReveal<HTMLElement>({ threshold: 0.07 });
@@ -100,12 +51,12 @@ export function Pricing() {
               )}
 
               <div className="mb-8">
-                <div
+                <h3
                   className="text-sm font-semibold mb-4"
                   style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-subtle)" }}
                 >
                   {plan.name}
-                </div>
+                </h3>
                 <div className="flex items-end gap-1 mb-3">
                   {plan.price !== "Consultar" && (
                     <span className="text-sm font-medium mb-1" style={{ color: plan.highlighted ? "rgba(255,255,255,0.6)" : "var(--text-muted)" }}>

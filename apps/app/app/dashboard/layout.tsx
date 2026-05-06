@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth/get-user-role";
+import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
 
 export default async function DashboardLayout({
@@ -7,12 +8,12 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getSessionUser();
+  const supabase = await createClient();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+  if (!authUser) redirect("/login");
 
-  if (!user) {
-    // Usuario autenticado pero sin membership → onboarding
-    redirect("/onboarding");
-  }
+  const user = await getSessionUser();
+  if (!user) redirect("/onboarding");
 
   return (
     <div className="flex min-h-screen">

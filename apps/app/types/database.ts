@@ -80,6 +80,34 @@ export type Database = {
         };
       };
     };
+      invitations: {
+        Row: {
+          id: string;
+          school_id: string;
+          email: string;
+          token: string;
+          role: "instructor" | "admin";
+          invited_by: string;
+          status: "pending" | "accepted" | "revoked";
+          expires_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          school_id: string;
+          email: string;
+          token?: string;
+          role?: "instructor" | "admin";
+          invited_by: string;
+          status?: "pending" | "accepted" | "revoked";
+          expires_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          status?: "pending" | "accepted" | "revoked";
+        };
+      };
+    };
     Views: Record<string, never>;
     Functions: Record<string, never>;
     Enums: {

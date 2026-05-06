@@ -9,12 +9,29 @@ const supabase = createClient(
 const NAME_MAX_LENGTH = 100;
 const EMAIL_MAX_LENGTH = 254;
 
+const ipRequests = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 5;
+const WINDOW_MS = 60_000;
+
 function sanitize(value: string): string {
   // eslint-disable-next-line no-control-regex
   return value.replace(/[\x00-\x1F\x7F]/g, "").trim();
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const now = Date.now();
+  const entry = ipRequests.get(ip);
+
+  if (entry && now < entry.resetAt) {
+    if (entry.count >= RATE_LIMIT) {
+      return NextResponse.json({ error: "Demasiados intentos. Espera un momento." }, { status: 429 });
+    }
+    entry.count++;
+  } else {
+    ipRequests.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+  }
+
   const contentLength = req.headers.get("content-length");
   if (contentLength && parseInt(contentLength, 10) > 1024) {
     return NextResponse.json({ error: "Solicitud demasiado grande" }, { status: 413 });

@@ -17,6 +17,14 @@ export async function createSchool(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  const { data: existingMembership } = await supabase
+    .from("memberships")
+    .select("id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (existingMembership) redirect("/dashboard");
+
   const slug = name
     .toLowerCase()
     .normalize("NFD")

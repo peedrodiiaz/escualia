@@ -1,5 +1,3 @@
-"use client";
-
 import { Logo } from "@/components/logo";
 
 export function Footer() {
@@ -13,8 +11,8 @@ export function Footer() {
 
         <div className="flex flex-wrap items-center justify-center gap-8 text-sm" style={{ color: "var(--text-subtle)" }}>
           {[
-            { label: "Política de privacidad", href: "#" },
-            { label: "Términos de uso", href: "#" },
+            { label: "Política de privacidad", href: "/privacidad" },
+            { label: "Términos de uso", href: "/terminos" },
             { label: "hola@escualia.es", href: "mailto:hola@escualia.es" },
           ].map((link) => (
             <a key={link.label} href={link.href} className="transition-opacity hover:opacity-60">
