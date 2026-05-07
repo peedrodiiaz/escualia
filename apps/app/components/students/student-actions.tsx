@@ -19,7 +19,8 @@ export function StudentActions({ student }: Props) {
   const handleDelete = async () => {
     if (!confirm("¿Eliminar este alumno? Esta acción no se puede deshacer.")) return;
     setDeleting(true);
-    await deleteStudent(student.id);
+    const result = await deleteStudent(student.id);
+    if (result?.error) setDeleting(false);
   };
 
   return (

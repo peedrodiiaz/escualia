@@ -1,17 +1,17 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import { inviteInstructor } from "@/app/dashboard/team/actions";
 import type { InvitationActionState } from "@/app/dashboard/team/actions";
 
 function SubmitButton() {
-  const [pending, setPending] = useState(false);
+  const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
       disabled={pending}
-      onClick={() => setPending(true)}
       className="w-full rounded-lg bg-[#2563EB] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#1d4ed8] disabled:opacity-50 transition-colors"
     >
       {pending ? "Enviando invitación..." : "Enviar invitación"}

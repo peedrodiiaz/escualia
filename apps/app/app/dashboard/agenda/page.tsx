@@ -1,20 +1,42 @@
-export default function AgendaPage() {
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/auth/get-user-role";
+import { createClient } from "@/lib/supabase/server";
+import { ClassList } from "@/components/agenda/class-list";
+
+export default async function AgendaPage() {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+
+  const supabase = await createClient();
+
+  const now = new Date().toISOString();
+
+  let classesQuery = supabase
+    .from("classes")
+    .select("*")
+    .eq("school_id", user.schoolId)
+    .gte("start_time", now)
+    .order("start_time", { ascending: true });
+
+  if (user.role === "instructor") {
+    classesQuery = classesQuery.eq("instructor_id", user.id);
+  }
+
+  const { data: classes } = await classesQuery;
+
+  const { data: students } = await supabase
+    .from("students")
+    .select("id, first_name, last_name, school_id, user_id, email, phone, dni, status, notes, created_at")
+    .eq("school_id", user.schoolId)
+    .eq("status", "active")
+    .order("first_name", { ascending: true });
+
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-1" style={{ color: "var(--text)" }}>
-        Agenda
-      </h1>
-      <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>
-        Gestión de clases prácticas y calendario de instructores.
-      </p>
-      <div
-        className="rounded-xl p-8 text-center"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}
-      >
-        <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-          Módulo en construcción — próximamente.
-        </p>
-      </div>
-    </div>
+    <ClassList
+      classes={classes ?? []}
+      students={students ?? []}
+      canCreate={user.role !== "student"}
+      canManage={user.role !== "student"}
+    />
   );
 }

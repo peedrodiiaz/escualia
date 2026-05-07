@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth/get-user-role";
 import { createClient } from "@/lib/supabase/server";
-import { Sidebar } from "@/components/layout/sidebar";
+import { AppShell } from "@/components/layout/app-shell";
 
 export default async function DashboardLayout({
   children,
@@ -15,15 +15,5 @@ export default async function DashboardLayout({
   const user = await getSessionUser();
   if (!user) redirect("/onboarding");
 
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar user={user} />
-      <main
-        className="flex-1 overflow-auto"
-        style={{ background: "var(--bg-subtle)" }}
-      >
-        {children}
-      </main>
-    </div>
-  );
+  return <AppShell user={user}>{children}</AppShell>;
 }

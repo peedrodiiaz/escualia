@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { BrevoClient } from "@getbrevo/brevo";
 import { getSessionUser } from "@/lib/auth/get-user-role";
 
 export type InvitationActionState = { error: string } | null;
@@ -26,32 +27,18 @@ export async function inviteInstructor(
 
   const admin = adminClient();
 
-  // Comprobar que no sea ya miembro
-  const { data: existing } = await admin
-    .from("memberships")
+  // Verificar si ya existe una invitación pendiente para este email
+  const { data: existingInvite } = await admin
+    .from("invitations")
     .select("id")
     .eq("school_id", user.schoolId)
-    .eq("user_id", (
-      await admin.from("memberships")
-        .select("user_id")
-        .eq("school_id", user.schoolId)
-        .limit(1)
-    ).data?.[0]?.user_id ?? "");
+    .eq("email", email)
+    .eq("status", "pending")
+    .single();
 
-  // Buscar si el email ya tiene una cuenta en auth.users y ya es miembro
-  const { data: authUsers } = await admin.auth.admin.listUsers();
-  const existingUser = authUsers?.users.find(u => u.email === email);
-  if (existingUser) {
-    const { data: membership } = await admin
-      .from("memberships")
-      .select("id")
-      .eq("school_id", user.schoolId)
-      .eq("user_id", existingUser.id)
-      .single();
-    if (membership) return { error: "Este usuario ya es miembro de tu autoescuela" };
-  }
+  if (existingInvite) return { error: "Ya existe una invitación pendiente para este email" };
 
-  // Crear invitación
+  // Crear invitación y enviar email — el callback gestiona usuarios nuevos y existentes
   const { data: invitation, error: inviteError } = await admin
     .from("invitations")
     .insert({
@@ -59,29 +46,44 @@ export async function inviteInstructor(
       email,
       role: "instructor",
       invited_by: user.id,
+      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
     })
     .select("token")
     .single();
 
   if (inviteError) {
-    if (inviteError.code === "23505") {
-      return { error: "Ya existe una invitación pendiente para este email" };
-    }
     return { error: "Error al crear la invitación. Inténtalo de nuevo." };
   }
 
-  // Enviar magic link con el token en redirectTo
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const redirectTo = `${appUrl}/auth/callback?invitation=${invitation.token}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3002";
+  const loginUrl = `${appUrl}/login?invitation=${invitation.token}`;
 
-  const { error: otpError } = await admin.auth.admin.generateLink({
-    type: "magiclink",
-    email,
-    options: { redirectTo },
-  });
+  // Enviar email con Brevo
+  const brevo = new BrevoClient({ apiKey: process.env.BREVO_API_KEY! });
 
-  if (otpError) {
-    // Revertir la invitación si falla el envío
+  try {
+    await brevo.transactionalEmails.sendTransacEmail({
+      sender: { name: "Escualia", email: process.env.BREVO_SENDER_EMAIL ?? "hola@escualia.es" },
+      to: [{ email }],
+      subject: "Te han invitado a unirte a Escualia",
+      htmlContent: `
+        <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;">
+          <h2 style="color:#2563EB;margin-bottom:8px;">Bienvenido a Escualia</h2>
+          <p style="color:#374151;margin-bottom:24px;">
+            Has sido invitado como instructor. Haz clic en el botón para acceder a tu panel.
+          </p>
+          <a href="${loginUrl}"
+             style="display:inline-block;background:#2563EB;color:white;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600;">
+            Aceptar invitación
+          </a>
+          <p style="color:#9CA3AF;font-size:12px;margin-top:24px;">
+            Este enlace caduca en 7 días. Si no esperabas esta invitación, ignora este email.
+          </p>
+        </div>
+      `,
+    });
+  } catch (emailErr) {
+    console.error("[inviteInstructor] brevo error:", JSON.stringify(emailErr));
     await admin.from("invitations").delete().eq("token", invitation.token);
     return { error: "Error al enviar el email de invitación. Inténtalo de nuevo." };
   }

@@ -38,7 +38,10 @@ export function Problem() {
           <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
             El problema real
           </p>
-          <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight mb-6" style={{ color: "var(--text)" }}>
+          <h2
+            className="reveal font-bold leading-tight mb-5"
+            style={{ color: "var(--text)", fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.025em" }}
+          >
             Así gestionas hoy<br />tu autoescuela.
           </h2>
           <p className="reveal text-lg leading-relaxed" style={{ color: "var(--text-muted)" }}>

@@ -49,11 +49,14 @@ export function Features() {
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="max-w-2xl mb-16">
+        <div className="max-w-2xl mb-20">
           <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
             Funciones
           </p>
-          <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight mb-6" style={{ color: "var(--text)" }}>
+          <h2
+            className="reveal font-bold leading-tight mb-5"
+            style={{ color: "var(--text)", fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.025em" }}
+          >
             Una plataforma completa,<br />diseñada para autoescuelas.
           </h2>
           <p className="reveal text-lg leading-relaxed" style={{ color: "var(--text-muted)" }}>
@@ -61,32 +64,39 @@ export function Features() {
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ background: "var(--border)" }}>
+        {/* Cards grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((f, i) => {
             const Icon = f.icon;
             return (
               <div
                 key={f.title}
-                className="stagger-item p-8"
+                className="stagger-item group rounded-2xl p-8 transition-shadow"
                 style={{
-                  background: "var(--bg-subtle)",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
                   ["--i" as string]: i,
                 }}
               >
                 <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-6"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-6 transition-colors"
                   style={{
                     background: "color-mix(in srgb, var(--brand) 10%, transparent)",
                     color: "var(--brand)",
                   }}
                 >
-                  <Icon size={20} />
+                  <Icon size={19} />
                 </div>
-                <h3 className="font-semibold text-base mb-3" style={{ color: "var(--text)" }}>
+                <h3
+                  className="font-semibold mb-3"
+                  style={{ color: "var(--text)", fontSize: 15 }}
+                >
                   {f.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
+                <p
+                  className="leading-relaxed"
+                  style={{ color: "var(--text-muted)", fontSize: 14 }}
+                >
                   {f.description}
                 </p>
               </div>

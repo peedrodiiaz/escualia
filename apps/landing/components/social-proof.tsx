@@ -37,7 +37,7 @@ const testimonials = [
   },
 ];
 
-function StatsGrid() {
+function StatsStrip() {
   const gridRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
   const countRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -54,7 +54,7 @@ function StatsGrid() {
         const el = countRefs.current[i];
         if (!el) return;
         if (prefersReduced) { el.textContent = stat.value; return; }
-        const duration = 1400;
+        const duration = 1600;
         const start = performance.now();
         const tick = (now: number) => {
           const progress = Math.min((now - start) / duration, 1);
@@ -75,21 +75,32 @@ function StatsGrid() {
   }, []);
 
   return (
-    <div ref={gridRef} className="grid sm:grid-cols-3 gap-px mb-20" style={{ background: "var(--border)" }}>
+    <div
+      ref={gridRef}
+      className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x"
+      style={{ divideColor: "rgba(255,255,255,0.08)" }}
+    >
       {stats.map((stat, i) => (
         <div
           key={stat.label}
-          className="stagger-item py-12 px-8 text-center"
-          style={{ background: "var(--bg)", ["--i" as string]: i }}
+          className="stagger-item flex flex-col items-center justify-center py-14 px-8 text-center"
+          style={{ ["--i" as string]: i }}
         >
           <span
             ref={(el) => { countRefs.current[i] = el; }}
-            className="block text-5xl font-black mb-3"
-            style={{ color: "var(--text)" }}
+            className="block font-black mb-3"
+            style={{
+              fontSize: "clamp(52px, 6vw, 72px)",
+              letterSpacing: "-0.04em",
+              color: "white",
+              lineHeight: 1,
+            }}
           >
             {stat.value}
           </span>
-          <span className="text-sm" style={{ color: "var(--text-muted)" }}>
+          <span
+            style={{ color: "rgba(255,255,255,0.45)", fontSize: 14, fontWeight: 500 }}
+          >
             {stat.label}
           </span>
         </div>
@@ -102,64 +113,81 @@ export function SocialProof() {
   const sectionRef = useReveal<HTMLElement>({ threshold: 0.08 });
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-32 px-4 sm:px-6"
-      style={{ background: "var(--bg)" }}
-    >
-      <div className="max-w-6xl mx-auto">
-
-        {/* Header */}
-        <div className="max-w-2xl mb-16">
-          <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
-            Resultados reales
-          </p>
-          <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight" style={{ color: "var(--text)" }}>
-            No promesas.<br />Números.
-          </h2>
+    <>
+      {/* Stats — full-bleed dark strip */}
+      <div
+        className="w-full"
+        style={{ background: "#080c18" }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <StatsStrip />
         </div>
-
-        <StatsGrid />
-
-        {/* Testimonials */}
-        <div className="grid sm:grid-cols-3 gap-8">
-          {testimonials.map((t, i) => (
-            <div
-              key={t.name}
-              className="stagger-item flex flex-col"
-              style={{ ["--i" as string]: i }}
-            >
-              <div className="flex gap-1 mb-5">
-                {Array.from({ length: t.stars }).map((_, j) => (
-                  <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
-                ))}
-              </div>
-              <blockquote
-                className="text-base leading-relaxed mb-8 flex-1"
-                style={{ color: "var(--text)" }}
-              >
-                &ldquo;{t.quote}&rdquo;
-              </blockquote>
-              <div className="flex items-center gap-3" style={{ borderTop: "1px solid var(--border)", paddingTop: "1.25rem" }}>
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0"
-                  style={{
-                    background: "color-mix(in srgb, var(--brand) 12%, transparent)",
-                    color: "var(--brand)",
-                  }}
-                >
-                  {t.avatar}
-                </div>
-                <div>
-                  <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>{t.name}</div>
-                  <div className="text-xs" style={{ color: "var(--text-subtle)" }}>{t.role}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
       </div>
-    </section>
+
+      {/* Testimonials */}
+      <section
+        ref={sectionRef}
+        className="py-32 px-4 sm:px-6"
+        style={{ background: "var(--bg)" }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-xl mb-16">
+            <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
+              Resultados reales
+            </p>
+            <h2
+              className="reveal font-bold leading-tight"
+              style={{ color: "var(--text)", fontSize: "clamp(32px, 4vw, 48px)", letterSpacing: "-0.025em" }}
+            >
+              No promesas.<br />Números.
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-8">
+            {testimonials.map((t, i) => (
+              <div
+                key={t.name}
+                className="stagger-item flex flex-col rounded-2xl p-8"
+                style={{
+                  border: "1px solid var(--border)",
+                  background: "var(--bg-card)",
+                  ["--i" as string]: i,
+                }}
+              >
+                <div className="flex gap-1 mb-6">
+                  {Array.from({ length: t.stars }).map((_, j) => (
+                    <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+                <blockquote
+                  className="text-base leading-relaxed mb-8 flex-1"
+                  style={{ color: "var(--text)", fontStyle: "normal" }}
+                >
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <div
+                  className="flex items-center gap-3 pt-5"
+                  style={{ borderTop: "1px solid var(--border)" }}
+                >
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0"
+                    style={{
+                      background: "color-mix(in srgb, var(--brand) 12%, transparent)",
+                      color: "var(--brand)",
+                    }}
+                  >
+                    {t.avatar}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>{t.name}</div>
+                    <div className="text-xs" style={{ color: "var(--text-subtle)" }}>{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

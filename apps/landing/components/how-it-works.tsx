@@ -40,7 +40,10 @@ export function HowItWorks() {
           <p className="reveal text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "var(--brand)" }}>
             Cómo funciona
           </p>
-          <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight" style={{ color: "var(--text)" }}>
+          <h2
+            className="reveal font-bold leading-tight"
+            style={{ color: "var(--text)", fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.025em" }}
+          >
             Tres pasos.<br />Toda la gestión resuelta.
           </h2>
         </div>
@@ -68,7 +71,10 @@ export function HowItWorks() {
 
               {/* Content */}
               <div className="flex flex-col justify-center">
-                <h3 className="text-2xl font-bold mb-4" style={{ color: "var(--text)" }}>
+                <h3
+                  className="font-bold mb-4"
+                  style={{ color: "var(--text)", fontSize: "clamp(19px, 2vw, 22px)", letterSpacing: "-0.015em" }}
+                >
                   {step.title}
                 </h3>
                 <p className="text-base leading-relaxed max-w-xl" style={{ color: "var(--text-muted)" }}>

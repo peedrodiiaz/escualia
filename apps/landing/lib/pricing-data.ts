@@ -34,7 +34,7 @@ export const pricingPlans = [
   {
     name: "Franquicia",
     price: "Consultar",
-    description: "Para grupos con varias academias y necesidades avanzadas.",
+    description: "Para grupos con varias sedes. Precio personalizado según volumen.",
     features: [
       "Todo el plan Escuela",
       "Multi-sede centralizada",

@@ -16,8 +16,6 @@ html {
   --brand: #2563EB;
   --brand-dark: #1D4ED8;
   --brand-deeper: #1e3a8a;
-  --accent: #F97316;
-  --accent-dark: #ea580c;
 
   --bg: #ffffff;
   --bg-subtle: #f8fafc;
@@ -33,19 +31,13 @@ html {
 
   --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
   --shadow-lg: 0 10px 40px -10px rgb(37 99 235 / 0.15);
+  --shadow-xl: 0 24px 80px -16px rgb(0 0 0 / 0.16), 0 0 0 1px rgb(0 0 0 / 0.03);
 
-  /* Feature accent colors */
-  --feature-blue: #2563EB;
-  --feature-orange: #ea580c;
-  --feature-green: #16A34A;
-  --feature-purple: #7c3aed;
-  --feature-pink: #db2777;
-  --feature-amber: #d97706;
-
-  /* Semantic state colors */
   --success: #16A34A;
   --success-bg: color-mix(in srgb, #16A34A 10%, transparent);
   --success-border: color-mix(in srgb, #16A34A 20%, transparent);
+
+  --spring: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,8 +45,6 @@ html {
     --brand: #3b82f6;
     --brand-dark: #2563EB;
     --brand-deeper: #1D4ED8;
-    --accent: #fb923c;
-    --accent-dark: #f97316;
 
     --bg: #0a0f1e;
     --bg-subtle: #0f172a;
@@ -70,6 +60,7 @@ html {
 
     --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.4);
     --shadow-lg: 0 10px 40px -10px rgb(59 130 246 / 0.2);
+    --shadow-xl: 0 24px 80px -16px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.04);
 
     --success: #22c55e;
     --success-bg: color-mix(in srgb, #22c55e 10%, transparent);
@@ -102,26 +93,42 @@ a {
 ::-webkit-scrollbar-thumb:hover { background: var(--brand); }
 
 /* ============================================================
-   REVEAL — solo fade, sin movimiento
+   REVEAL — fade + rise with spring easing
    ============================================================ */
 .reveal {
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transform: translateY(22px);
+  transition: opacity 0.75s var(--spring), transform 0.75s var(--spring);
 }
 
 .reveal.visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
-/* Stagger — fade con delay variable */
+/* Stagger — fade + rise with delay variable */
 .stagger-item {
   opacity: 0;
-  transition: opacity 0.5s ease;
-  transition-delay: calc(var(--i, 0) * 80ms);
+  transform: translateY(18px);
+  transition:
+    opacity 0.65s var(--spring),
+    transform 0.65s var(--spring);
+  transition-delay: calc(var(--i, 0) * 75ms);
 }
 
 .stagger-item.visible {
   opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   GRADIENT TEXT UTILITY
+   ============================================================ */
+.gradient-text {
+  background: linear-gradient(135deg, var(--brand) 0%, color-mix(in srgb, var(--brand) 60%, #818cf8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ============================================================
@@ -131,6 +138,7 @@ a {
   .reveal,
   .stagger-item {
     opacity: 1;
+    transform: none;
     transition: none;
   }
 }

@@ -29,4 +29,19 @@ export const faqItems = [
     answer:
       "No necesita instalar nada para reservar clases — lo hace desde el navegador del móvil. Para la app de estudio con tests y simulacros DGT, hay una app nativa disponible en iOS y Android.",
   },
+  {
+    question: "¿Qué pasa si se va el internet durante una clase?",
+    answer:
+      "Escualia funciona sin conexión para las funciones básicas: el instructor puede registrar clases y anotar incidencias offline. Cuando vuelve la conexión, todo se sincroniza automáticamente. Cero pérdida de datos.",
+  },
+  {
+    question: "¿Qué pasa con mis datos si decido cancelar?",
+    answer:
+      "Tus datos son tuyos. Si cancelas, puedes exportar toda la información de alumnos, facturas y clases en formato CSV/Excel antes de cerrar la cuenta. No borramos nada hasta que tú lo pides.",
+  },
+  {
+    question: "¿El soporte es en español? ¿Cuánto tardan en responder?",
+    answer:
+      "Sí, el equipo de Escualia es español y el soporte es siempre en español. Respondemos por email en menos de 24 horas en días laborables. Las primeras 50 autoescuelas tienen soporte prioritario con respuesta en menos de 4 horas.",
+  },
 ];

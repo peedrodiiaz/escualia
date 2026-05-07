@@ -45,7 +45,7 @@ export async function createSchool(
 
   if (schoolError || !school) {
     console.error("[createSchool] schools insert error:", schoolError);
-    return { error: schoolError?.message ?? "No se pudo crear la autoescuela" };
+    return { error: "No se pudo crear la autoescuela. Inténtalo de nuevo." };
   }
 
   const { error: membershipError } = await admin.from("memberships").insert({
@@ -56,7 +56,7 @@ export async function createSchool(
 
   if (membershipError) {
     console.error("[createSchool] memberships insert error:", membershipError);
-    return { error: membershipError.message };
+    return { error: "Error al configurar tu cuenta. Contacta con soporte." };
   }
 
   redirect("/dashboard");

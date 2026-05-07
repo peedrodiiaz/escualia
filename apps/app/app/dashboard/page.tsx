@@ -1,6 +1,7 @@
 import { getSessionUser } from "@/lib/auth/get-user-role";
 import { createClient } from "@/lib/supabase/server";
-import { Users, CalendarDays, Receipt, TrendingUp } from "lucide-react";
+import { Users, CalendarDays, Receipt, TrendingUp, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 async function getDashboardStats(schoolId: string) {
   const supabase = await createClient();
@@ -35,36 +36,47 @@ export default async function DashboardPage() {
       value: stats.totalStudents,
       icon: Users,
       color: "var(--brand)",
-      colorBg: "color-mix(in srgb, var(--brand) 10%, transparent)",
+      bg: "rgba(59,130,246,0.1)",
     },
     {
       label: "Alumnos activos",
       value: stats.activeStudents,
       icon: TrendingUp,
       color: "var(--success)",
-      colorBg: "var(--success-bg)",
+      bg: "var(--success-bg)",
     },
     {
       label: "Clases esta semana",
       value: "—",
       icon: CalendarDays,
-      color: "#7c3aed",
-      colorBg: "color-mix(in srgb, #7c3aed 10%, transparent)",
+      color: "#a78bfa",
+      bg: "rgba(167,139,250,0.1)",
     },
     {
       label: "Facturación pendiente",
       value: "—",
       icon: Receipt,
       color: "var(--warning)",
-      colorBg: "var(--warning-bg)",
+      bg: "var(--warning-bg)",
     },
   ];
 
+  const quickLinks = [
+    { label: "Ver alumnos", href: "/dashboard/students", description: "Gestiona expedientes" },
+    { label: "Abrir agenda", href: "/dashboard/agenda", description: "Clases programadas" },
+    { label: "Facturación", href: "/dashboard/billing", description: "Pagos y facturas" },
+  ];
+
   return (
-    <div className="p-8">
+    <div className="p-6 lg:p-8 max-w-6xl">
+
+      {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "var(--text)" }}>
-          Bienvenido, {user.email.split("@")[0]}
+        <h1
+          className="font-bold mb-1"
+          style={{ color: "var(--text)", fontSize: 22, letterSpacing: "-0.02em" }}
+        >
+          Dashboard
         </h1>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
           {user.schoolName} · {roleLabel(user.role)}
@@ -72,22 +84,28 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
             <div
               key={card.label}
               className="rounded-xl p-5"
-              style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+              }}
             >
               <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center mb-4"
-                style={{ background: card.colorBg, color: card.color }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center mb-4"
+                style={{ background: card.bg, color: card.color }}
               >
-                <Icon size={18} />
+                <Icon size={16} />
               </div>
-              <p className="text-2xl font-bold mb-1" style={{ color: "var(--text)" }}>
+              <p
+                className="font-bold mb-1"
+                style={{ color: "var(--text)", fontSize: 24, letterSpacing: "-0.02em", lineHeight: 1 }}
+              >
                 {card.value}
               </p>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>
@@ -98,18 +116,60 @@ export default async function DashboardPage() {
         })}
       </div>
 
-      {/* Placeholder upcoming features */}
+      {/* Quick links */}
+      {user.role !== "student" && (
+        <div className="grid sm:grid-cols-3 gap-3 mb-8">
+          {quickLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="group flex items-center justify-between rounded-xl p-4 transition-colors"
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              <div>
+                <p className="text-sm font-semibold mb-0.5" style={{ color: "var(--text)" }}>
+                  {link.label}
+                </p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+                  {link.description}
+                </p>
+              </div>
+              <ArrowRight
+                size={16}
+                style={{ color: "var(--text-subtle)" }}
+                className="shrink-0 group-hover:translate-x-0.5 transition-transform"
+              />
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Upcoming classes placeholder */}
       <div
         className="rounded-xl p-6"
         style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}
       >
-        <h2 className="font-semibold text-sm mb-4" style={{ color: "var(--text)" }}>
+        <h2
+          className="font-semibold mb-1"
+          style={{ color: "var(--text)", fontSize: 14 }}
+        >
           Próximas clases
         </h2>
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-          El módulo de agenda estará disponible próximamente.
+          Las clases programadas aparecerán aquí.{" "}
+          <Link
+            href="/dashboard/agenda"
+            className="font-medium"
+            style={{ color: "var(--brand)" }}
+          >
+            Ir a la agenda →
+          </Link>
         </p>
       </div>
+
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Mail, Loader2, CheckCircle } from "lucide-react";
 
@@ -8,16 +9,21 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const searchParams = useSearchParams();
+  const invitationToken = searchParams.get("invitation");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
     setErrorMsg("");
 
+    const callbackUrl = new URL(`${window.location.origin}/auth/callback`);
+    if (invitationToken) callbackUrl.searchParams.set("invitation", invitationToken);
+
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: callbackUrl.toString() },
     });
 
     if (error) {

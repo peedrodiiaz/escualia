@@ -48,15 +48,18 @@ export function WaitlistSection() {
       <div className="max-w-xl mx-auto text-center">
 
         <p className="reveal text-xs font-semibold tracking-widest uppercase mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>
-          Acceso anticipado · Solo 50 plazas
+          Acceso anticipado · Quedan pocas plazas
         </p>
 
-        <h2 className="reveal text-4xl sm:text-5xl font-bold leading-tight text-white mb-6">
+        <h2
+          className="reveal font-bold leading-tight text-white mb-6"
+          style={{ fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.025em" }}
+        >
           Sé de las primeras<br />autoescuelas en usarlo.
         </h2>
 
         <p className="reveal text-lg mb-12" style={{ color: "rgba(255,255,255,0.65)" }}>
-          Acceso gratuito extendido y soporte personalizado para las primeras 50 autoescuelas.
+          3 meses de acceso gratuito completo + soporte personalizado para las primeras 50 autoescuelas. Sin tarjeta, sin compromiso.
         </p>
 
         <div className="reveal">
@@ -123,14 +126,14 @@ export function WaitlistSection() {
                   <Loader2 size={18} className="animate-spin" />
                 ) : (
                   <>
-                    Quiero acceso anticipado
+                    Solicitar mi plaza ahora
                     <ArrowRight size={18} />
                   </>
                 )}
               </button>
 
               <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
-                Sin tarjeta de crédito · Sin compromiso · Cancela cuando quieras
+                Sin tarjeta de crédito · 3 meses gratis · Cancela cuando quieras
               </p>
             </form>
           )}

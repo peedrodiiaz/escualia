@@ -35,7 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard/settings", label: "Ajustes", icon: Settings, roles: ["admin"] },
 ];
 
-export function Sidebar({ user }: { user: SessionUser }) {
+export function Sidebar({ user, onClose }: { user: SessionUser; onClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -57,11 +57,22 @@ export function Sidebar({ user }: { user: SessionUser }) {
       }}
     >
       {/* Logo */}
-      <div className="px-5 py-5 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-        <span className="text-lg font-black tracking-tight" style={{ color: "#fff" }}>
-          Escualia
-        </span>
-        <p className="text-xs mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.35)" }}>
+      <div className="px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-2.5 mb-1" aria-label="Escualia">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt=""
+            width={24}
+            height={24}
+            aria-hidden="true"
+            style={{ objectFit: "contain", filter: "brightness(0) invert(1)" }}
+          />
+          <span className="text-base font-black tracking-tight" style={{ color: "#fff" }}>
+            Escualia
+          </span>
+        </div>
+        <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.35)" }}>
           {user.schoolName}
         </p>
       </div>
@@ -79,6 +90,7 @@ export function Sidebar({ user }: { user: SessionUser }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
               style={{
                 color: isActive ? "#fff" : "rgba(255,255,255,0.5)",

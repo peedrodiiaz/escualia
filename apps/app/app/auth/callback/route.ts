@@ -7,30 +7,39 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const token_hash = searchParams.get("token_hash") ?? searchParams.get("token");
-  const type = searchParams.get("type") as EmailOtpType | null;
+  const type = (searchParams.get("type") ?? "magiclink") as EmailOtpType;
   const invitationToken = searchParams.get("invitation");
   const rawNext = searchParams.get("next") ?? "/dashboard";
   const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/dashboard";
 
   const supabase = await createClient();
-
   let sessionEstablished = false;
 
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) sessionEstablished = true;
+    else console.error("[callback] exchangeCodeForSession error:", error.message);
   }
 
-  if (!sessionEstablished && token_hash && type) {
+  if (!sessionEstablished && token_hash) {
     const { error } = await supabase.auth.verifyOtp({ token_hash, type });
     if (!error) sessionEstablished = true;
+    else console.error("[callback] verifyOtp error:", error.message);
   }
 
   if (!sessionEstablished) {
-    return NextResponse.redirect(`${origin}/auth/error`);
+    // Redact sensitive query params before logging
+    const safeParams = Object.fromEntries(
+      [...searchParams.entries()].map(([k, v]) =>
+        ["code", "token_hash", "token", "invitation"].includes(k)
+          ? [k, "[REDACTED]"]
+          : [k, v]
+      )
+    );
+    console.error("[callback] no session — params:", safeParams);
+    return NextResponse.redirect(`${origin}/login?error=link_invalido`);
   }
 
-  // Procesar invitación si viene en la URL
   if (invitationToken) {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
@@ -48,23 +57,29 @@ export async function GET(request: Request) {
       if (
         invitation &&
         invitation.status === "pending" &&
-        new Date(invitation.expires_at) > new Date()
+        new Date(invitation.expires_at) > new Date() &&
+        invitation.email === user.email
       ) {
-        // Verificar que el email coincide con el usuario autenticado
-        if (invitation.email === user.email) {
-          // Crear membership
+        // Evitar membership duplicada
+        const { data: existing } = await admin
+          .from("memberships")
+          .select("id")
+          .eq("school_id", invitation.school_id)
+          .eq("user_id", user.id)
+          .single();
+
+        if (!existing) {
           await admin.from("memberships").insert({
             school_id: invitation.school_id,
             user_id: user.id,
             role: invitation.role,
           });
-
-          // Marcar invitación como aceptada
-          await admin
-            .from("invitations")
-            .update({ status: "accepted" })
-            .eq("id", invitation.id);
         }
+
+        await admin
+          .from("invitations")
+          .update({ status: "accepted" })
+          .eq("id", invitation.id);
       }
     }
   }
